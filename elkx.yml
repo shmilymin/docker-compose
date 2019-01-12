@@ -1,5 +1,5 @@
 elkx:
-  image: sebp/elkx:650
+  image: sebp/elkx:622
   ports:
     - "5601:5601"
     - "9200:9200"
