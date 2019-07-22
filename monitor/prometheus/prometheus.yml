@@ -26,18 +26,18 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-      - targets: ['192.168.168.131:9090']
+      - targets: ['192.168.168.150:9090']
 
   - job_name: 'cadvisor'
     static_configs:
-      - targets: ['192.168.168.131:8080']
+      - targets: ['192.168.168.150:9101']
 
-  # - job_name: 'tomcat'
-  #   static_configs:
-  #   - targets: ['192.131.129.129:9151','192.131.129.129:9152']
+  - job_name: 'tomcat'
+    static_configs:
+      - targets: ['192.168.168.150:9151']
   - job_name: 'os'
     static_configs:
-      - targets: ['192.168.168.131:9100']
+      - targets: ['192.168.168.150:9100']
   # - job_name: 'mysql'
   #   static_configs:
-  #   - targets: ['192.131.129.129:9104']
+  #   - targets: ['192.168.168.150:9104']
