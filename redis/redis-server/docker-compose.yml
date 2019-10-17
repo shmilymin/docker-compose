@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  # 主节点的容器
+  redis-server-master:
+    image: redis
+    container_name: redis-server-master
+    restart: always
+    ports:
+      - 6379:6379
+    environment:
+      TZ: "Asia/Shanghai"
+    volumes:
+      # 映射配置文件和数据目录
+      - ./redis-master.conf:/usr/local/etc/redis/redis.conf
+      - ../data/redis-master:/data
+    sysctls:
+      # 必要的内核参数
+      net.core.somaxconn: '511'
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+  # 从节点1的容器
+  redis-server-slave-1:
+    image: redis
+    container_name: redis-server-slave-1
+    restart: always
+    depends_on:
+      - redis-server-master
+    ports:
+      - 6380:6380
+    environment:
+      TZ: "Asia/Shanghai"
+    volumes:
+      - ./redis-slave1.conf:/usr/local/etc/redis/redis.conf
+      - ../data/redis-slave-1:/data
+    sysctls:
+      net.core.somaxconn: '511'
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+  # 从节点2的容器
+  redis-server-slave-2:
+    image: redis
+    container_name: redis-server-slave-2
+    restart: always
+    depends_on:
+      - redis-server-master
+    ports:
+      - 6381:6381
+    environment:
+      TZ: "Asia/Shanghai"
+    volumes:
+      - ./redis-slave2.conf:/usr/local/etc/redis/redis.conf
+      - ../data/redis-slave-2:/data
+    sysctls:
+      net.core.somaxconn: '511'
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]

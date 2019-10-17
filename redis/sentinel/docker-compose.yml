@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  # 哨兵的数量应是奇数，以便于哨兵通过投票来作出决策
+  redis-sentinel-1:
+    image: redis
+    container_name: redis-sentinel-1
+    restart: always
+    ports:
+      # 向外暴露26379端口
+      - 26379:26379
+    volumes:
+      # 将哨兵配置文件和存放数据的文件夹挂载到容器内
+      - ./redis-sentinel.conf:/usr/local/etc/redis/redis-sentinel.conf
+      - ../data/redis-sentinel-1:/data
+    sysctls:
+      # 设定容器的内核参数，以消除Redis启动过程中的一个warning
+      net.core.somaxconn: '511'
+    # 根据指定的配置文件来启动Redis哨兵
+    command: ["redis-sentinel", "/usr/local/etc/redis/redis-sentinel.conf"]
+  redis-sentinel-2:
+    image: redis
+    container_name: redis-sentinel-2
+    restart: always
+    ports:
+      - 26380:26379
+    volumes:
+      - ./redis-sentinel.conf:/usr/local/etc/redis/redis-sentinel.conf
+      - ../data/redis-sentinel-2:/data
+    sysctls:
+      net.core.somaxconn: '511'
+    command: ["redis-sentinel", "/usr/local/etc/redis/redis-sentinel.conf"]
+  redis-sentinel-3:
+    image: redis
+    container_name: redis-sentinel-3
+    restart: always
+    ports:
+      - 26381:26379
+    volumes:
+      - ./redis-sentinel.conf:/usr/local/etc/redis/redis-sentinel.conf
+      - ../data/redis-sentinel-3:/data
+    sysctls:
+      net.core.somaxconn: '511'
+    command: ["redis-sentinel", "/usr/local/etc/redis/redis-sentinel.conf"]
+
+networks:
+  default:
+    external:
+      # 因为哨兵容器需要与服务端容器运行在同一网络内
+      # 所以这里指定了一个外部的网络
+      # 网络名参考《使用Docker配置Redis主从复制》中的注释
+      name: redis-server_default
