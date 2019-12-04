@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+  elk:
+    image: sebp/elk:740
+    container_name: elk
+    ports:
+      - "5601:5601"
+      - "9200:9200"
+      - "5044:5044"
+    environment:
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - "TZ=Asia/Shanghai"
+    volumes:
+      - ./elasticsearch:/var/lib/elasticsearch
+      - ./logstash:/etc/logstash/conf.d
