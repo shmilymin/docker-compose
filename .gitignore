@@ -6,3 +6,5 @@ monitor/node_exporter
 redis/data
 
 nacos/logs
+
+elk/elasticsearch
