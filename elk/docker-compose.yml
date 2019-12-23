@@ -10,3 +10,5 @@ services:
     environment:
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
       - "TZ=Asia/Shanghai"
+    volumes:
+      - ./elasticsearch:/var/lib/elasticsearch
